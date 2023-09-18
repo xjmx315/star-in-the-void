@@ -1,12 +1,12 @@
-﻿version = '1.0'
+﻿#savefile.py
+version = '1.0'
 loadtype = '.game'
-from genericpath import isfile
 import os
 import jmutils
 import pickle
 import time
 
-class gamefile:
+class Gamefile:
     def __init__(self, filename):
         self.filename = filename
         self.version = '1.0'
@@ -15,14 +15,14 @@ class gamefile:
     
     def make_meta(self, path):
         self.metapath = path
-        data = metafile(self.filename)
+        data = Metafile(self.filename)
         data.info = 'star-in-the-void game save file'
         data.user = self.username
         with open(os.path.join(path, self.filename+'.meta')) as fw:
             pickle.dump(data, fw)
         return os.path.join(path, self.filename+'.meta')
     
-class metafile:
+class Metafile:
     def __init__(self, filename):
         self.filename = filename
         self.lastsave = time.time()
@@ -55,7 +55,7 @@ def get_gamefile(path = os.getcwd()):
 def make_file(path):
     print('새로운 파일의 이름을 입력하세요: ')
     filename = input()
-    data = gamefile(filename + '.' + loadtype)
+    data = Gamefile(filename + '.' + loadtype)
     data.make_meta(path)
     with open(os.path.join(path, filename), 'wb') as fw:
         pickle.dump(data, fw)

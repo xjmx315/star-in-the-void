@@ -1,4 +1,5 @@
-﻿version = '1.0'
+﻿#jmutils.py
+version = '1.0'
 def choice(options, qustion = ''):
     print(qustion)
     for i, option in enumerate(options):
