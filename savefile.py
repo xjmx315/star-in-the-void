@@ -12,13 +12,14 @@ class Gamefile:
         self.version = '1.0'
         self.username = ''
         self.metapath = ''
+        self.data = ''
     
     def make_meta(self, path):
         self.metapath = path
         data = Metafile(self.filename)
         data.info = 'star-in-the-void game save file'
         data.user = self.username
-        with open(os.path.join(path, self.filename+'.meta')) as fw:
+        with open(os.path.join(path, self.filename+'.meta'), 'wb') as fw:
             pickle.dump(data, fw)
         return os.path.join(path, self.filename+'.meta')
     
@@ -29,9 +30,9 @@ class Metafile:
         self.info = ''
         self.user = ''
         
-    def info(self):
-        time = time.strftime('%Y-%m-%d %I:%M:%S %p', time.localtime(self.lastsave))
-        info = self.info +'\n'+ time +'\n'+ self.user
+    def get_info(self):
+        timestr = time.strftime('%Y-%m-%d %I:%M:%S %p', time.localtime(self.lastsave))
+        info = self.info +'\n'+ timestr +'\n'+ self.user
         return info
     
 #-------------
@@ -50,6 +51,8 @@ def get_gamefile(path = os.getcwd()):
             else:
                 print('메타파일은 존재하지만 연결된 파일이 없습니다. ')
                 return get_gamefile(path) #개선 가능성
+        else:
+            return get_gamefile(path)
     return make_file(path)
 
 def make_file(path):
@@ -57,15 +60,15 @@ def make_file(path):
     filename = input()
     data = Gamefile(filename + '.' + loadtype)
     data.make_meta(path)
-    with open(os.path.join(path, filename), 'wb') as fw:
+    with open(os.path.join(path, filename+ '.' + loadtype), 'wb') as fw:
         pickle.dump(data, fw)
     return data
     
 def read_metafile(path):
     with open(path, 'rb') as fr:
         data = pickle.load(fr)
-    return data.info()
-     
+    return data.get_info()
+    
 def choice_file(filetype = None, path = None):
     if filetype:
         target = []
@@ -87,3 +90,9 @@ def ismatch_type(filename, filetype):
 def set_type(newtype):
     global loadtype
     loadtype = newtype
+    
+#---------------------
+
+def save_gamefile(gamefile):
+    
+    pass

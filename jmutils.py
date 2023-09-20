@@ -1,5 +1,7 @@
 ﻿#jmutils.py
 version = '1.0'
+import time
+
 def choice(options, qustion = ''):
     print(qustion)
     for i, option in enumerate(options):
@@ -15,3 +17,9 @@ def choice(options, qustion = ''):
     except:
        print('올바른 숫자를 입력해 주세요. ')
        return choice(options)
+   
+def say(string, temp = 0.02):
+    for i in string:
+        print(i, end = '', flush=True)
+        time.sleep(temp)
+        
